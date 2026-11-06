@@ -1,32 +1,77 @@
-# Ghost CMS Architecture Visualizer & Interactive Subsystem Simulator
+## 🚀 Live Deployment
+[Ghost CMS Architectural Visualizer](https://ghost-architectural-visualizer.pages.dev)
+# React + TypeScript + Vite
 
-An interactive architectural analysis dashboard and event-driven prototype exploring **Ghost CMS**, a production-grade open-source publishing platform built as a **Modular Monolith**.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
----
+Currently, two official plugins are available:
 
-## 🔗 Submission Links
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-* **Live Deployment:** [https://ghost-arch-visualizer.pages.dev](https://ghost-arch-visualizer.pages.dev) *(Replace with your actual Cloudflare Pages URL)*
-* **GitHub Repository:** [https://github.com/YOUR_USERNAME/ghost-architecture-visualizer](https://github.com/YOUR_USERNAME/ghost-architecture-visualizer)
-* **Video Walkthrough:** [https://youtu.be/YOUR_VIDEO_ID](https://youtu.be/YOUR_VIDEO_ID) *(Replace with your Loom or YouTube unlisted video link)*
+## React Compiler
 
----
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## 🏗️ System Architecture Breakdown
+## Expanding the ESLint configuration
 
-Ghost uses a **Modular Monolith** pattern—combining the clean domain boundary isolation of microservices with the single-deployment simplicity and low latency of a monolith.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-### Core Architectural Layers & Components
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-1. **Reverse Proxy & Edge Processing (Nginx):** Handles SSL termination, static asset caching, rate limiting, and forwards dynamic requests to Node.js.
-2. **Core Server (Node.js Express Application):**
-   * **Admin & Content APIs:** RESTful JSON endpoints exposing CRUD operations for posts, members, and settings.
-   * **Themes & Rendering Engine:** Server-side rendering layer utilizing Express and Handlebars.
-   * **Domain Services:** Encapsulated business domains (`PostService`, `MemberService`, `NewsletterService`).
-3. **Data Access & ORM (Knex.js & Bookshelf.js):** Provides a clean data-mapping interface supporting schema migrations, connection pooling, and multi-database support.
-4. **Data & Caching Layer:**
-   * **MySQL 8.0:** Primary relational storage engine for post records, user roles, structured metadata, and transaction integrity.
-   * **Redis / Memory Cache:** Caches session tokens, rate limits, and hot query objects to minimize database read overhead.
-5. **Asynchronous Event Engine (`EventEmitter` Bus):** decoupled publish-subscribe bus that handles non-blocking background workflows (webhooks, email dispatches, search indexing, and cache invalidation).
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-### Data & Request Flow
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+
+```
+
+You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+
+```

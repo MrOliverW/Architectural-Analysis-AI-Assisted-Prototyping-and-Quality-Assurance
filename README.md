@@ -3,7 +3,7 @@
 An interactive companion visualizer and quality assurance audit dashboard built to analyze the architectural patterns, component boundaries, and testing frameworks of **Ghost CMS**.
 
 - **Live Deployment:** [https://ghost-architectural-visualizer.pages.dev](https://ghost-architectural-visualizer.pages.dev)
-- **Video Demonstration:** [\[Insert YouTube / Loom / Panopto Link Here\]](https://youtu.be/1dG49GPg-Lc)
+- **Video Demonstration:** https://youtu.be/1dG49GPg-Lc
 
 ---
 
